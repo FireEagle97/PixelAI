@@ -1,8 +1,14 @@
+import Header from '@/components/shared/Header'
 import React from 'react'
+import { transformationTypes } from '@/constants'
 
-function AddTransoformationTypePage() {
+function AddTransoformationTypePage({ params: {type}} : SearchParamProps) {
+  const trasformation = transformationTypes[type];
   return (
-    <div>AddTransoformationTypePage</div>
+    <Header 
+    title={trasformation.title}
+    subtitle={trasformation.subTitle}
+    />
   )
 }
 
