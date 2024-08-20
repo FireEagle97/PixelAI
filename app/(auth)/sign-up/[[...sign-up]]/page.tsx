@@ -3,7 +3,7 @@ import React from 'react'
 
 function SignUpPage() {
   return (
-    <SignUp/>
+    <SignUp afterSignOutUrl="/"/>
   )
 }
 

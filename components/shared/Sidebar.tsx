@@ -59,6 +59,11 @@ function Sidebar() {
                             <li className='flex-center cursor-pointer gap-2 p-4'>
                                 <UserButton afterSwitchSessionUrl='/' showName />
                             </li>
+                            <li className='flex-center cursor-pointer gap-2 p-4'>
+                                <Link href="/client">
+                                    Client
+                                </Link>
+                            </li>
                         </ul>
                     </SignedIn>
                     <SignedOut>
