@@ -1,6 +1,6 @@
 "use client"
 import { navLinks } from '@/constants'
-import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
+// import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -16,7 +16,7 @@ function Sidebar() {
                     <Image src="/assets/images/logo-text.svg" alt="logo" width={180} height={28} />
                 </Link>
                 <nav className='sidebar-nav'>
-                    <SignedIn>
+                    {/* <SignedIn> */}
                         <ul className='sidebar-nav_elements'>
                             {navLinks.slice(0, 6).map((link) => {
                                 const isActive = link.route === pathname
@@ -56,21 +56,21 @@ function Sidebar() {
                                     </li>
                                 )
                             })}
-                            <li className='flex-center cursor-pointer gap-2 p-4'>
+                            {/* <li className='flex-center cursor-pointer gap-2 p-4'>
                                 <UserButton afterSwitchSessionUrl='/' showName />
-                            </li>
+                            </li> */}
                             <li className='flex-center cursor-pointer gap-2 p-4'>
                                 <Link href="/client">
                                     Client
                                 </Link>
                             </li>
                         </ul>
-                    </SignedIn>
-                    <SignedOut>
+                    {/* </SignedIn>
+                    <SignedOut> */}
                         <Button asChild className='button bg-purple-gradient bg-cover'>
-                            <Link href="/sign-in">Login</Link>
+                            <Link href="/api/auth/signin">Login</Link>
                         </Button>
-                    </SignedOut>
+                    {/* </SignedOut> */}
                 </nav>
             </div>
         </aside>

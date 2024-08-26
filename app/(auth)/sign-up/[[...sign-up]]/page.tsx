@@ -1,10 +1,10 @@
 import { SignUp } from '@clerk/nextjs'
 import React from 'react'
 
-function SignUpPage() {
-  return (
-    <SignUp afterSignOutUrl="/"/>
-  )
-}
+// function SignUpPage() {
+//   return (
+//     <SignUp afterSignOutUrl="/"/>
+//   )
+// }
 
-export default SignUpPage
+// export default SignUpPage

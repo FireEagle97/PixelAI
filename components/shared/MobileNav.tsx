@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/sheet"
 import Link from 'next/link'
 import Image from 'next/image'
-import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
+// import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
 import { navLinks } from '@/constants'
 import { usePathname } from 'next/navigation'
 import { Button } from '../ui/button'
@@ -26,8 +26,8 @@ function MobileNav() {
                 />
             </Link>
             <nav className='flex gap-2'>
-                <SignedIn>
-                    <UserButton afterSwitchSessionUrl='/' />
+                {/* <SignedIn>
+                    <UserButton afterSwitchSessionUrl='/' /> */}
                     <Sheet>
                         <SheetTrigger>
                             <Image
@@ -69,12 +69,12 @@ function MobileNav() {
                         </SheetContent>
                     </Sheet>
 
-                </SignedIn>
-                <SignedOut>
+                {/* </SignedIn>
+                <SignedOut> */}
                         <Button asChild className='button bg-purple-gradient bg-cover'>
                             <Link href="/sign-in">Login</Link>
                         </Button>
-                </SignedOut>
+                {/* </SignedOut> */}
 
             </nav>
         </header>
