@@ -1,5 +1,5 @@
 import React from 'react'
-import { options } from "../api/auth/[...nextauth]/options"
+import { options } from "./api/auth/[...nextauth]/options"
 import { getServerSession } from "next-auth/next"
 async function Home() {
   //example of protecting home page
