@@ -8,8 +8,8 @@ export const options: NextAuthOptions = {
 
     providers: [
         GitHubProvider({
-            clientId: process.env.GITHUB_ID! as string,
-            clientSecret: process.env.GITHUB_SECRET_ID! as string,
+            clientId: process.env.NEXT_PUBLIC_GITHUB_ID! as string,
+            clientSecret: process.env.NEXT_PUBLIC_GITHUB_SECRET_ID! as string,
             authorization: { params: { scope: 'read:user user:email' } },
 
         }),
