@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import MobileNav from '@/components/shared/MobileNav';
 import Sidebar from '@/components/shared/Sidebar';
+import AuthProvider from "./context/AuthProvider";
 // import { ClerkProvider, SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 
 const IBMPlex = IBM_Plex_Sans({
@@ -27,21 +28,27 @@ export default function RootLayout({
     // <ClerkProvider appearance={{
     //   variables: {colorPrimary: '#624cf5'}
     // }}>
+
     <html lang="en">
       <body className={cn("font-IBMPlex antialiased", IBMPlex.variable)}>
-        <header>
-        </header>
-        <main className="root">
-          <Sidebar />
-          <MobileNav />
-          <div className='root-container'>
-            <div className='wrapper'>
-              {children}
+        <AuthProvider>
+          <header>
+          </header>
+          <main className="root">
+            <Sidebar />
+            <MobileNav />
+            <div className='root-container'>
+              <div className='wrapper'>
+                {children}
+              </div>
             </div>
-          </div>
-        </main>
+          </main>
+        </AuthProvider>
+
       </body>
     </html>
+
+
     // </ClerkProvider>
 
   );
