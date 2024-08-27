@@ -2,7 +2,7 @@ import type { NextAuthOptions } from "next-auth";
 import GitHubProvider from "next-auth/providers/github"
 import CredentialsProvider from "next-auth/providers/credentials"
 console.log('GitHub Client ID:', process.env.NEXT_PUBLIC_GETHUB_ID)
-console.log('GitHub Client Secret:', process.env.NEXT_PUBLIC_GITHUB_SECRET)
+console.log('GitHub Client Secret:', process.env.NEXT_PUBLIC_GITHUB_SECRET_ID)
 
 export const options: NextAuthOptions = {
 
