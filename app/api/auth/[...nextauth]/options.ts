@@ -10,7 +10,10 @@ export const options: NextAuthOptions = {
         GitHubProvider({
             clientId: process.env.NEXT_PUBLIC_GITHUB_ID! as string,
             clientSecret: process.env.NEXT_PUBLIC_GITHUB_SECRET_ID! as string,
-            authorization: { params: { scope: 'read:user user:email' } },
+            authorization: { params: { 
+                scope: 'read:user user:email',
+                redirect_uri: process.env.NEXTAUTH_URL + "/api/auth/callback/github",        
+            } },
 
         }),
         CredentialsProvider({
