@@ -1,8 +1,6 @@
 import type { NextAuthOptions } from "next-auth";
 import GitHubProvider from "next-auth/providers/github"
 import CredentialsProvider from "next-auth/providers/credentials"
-console.log('GitHub Client ID:', process.env.NEXT_PUBLIC_GITHUB_ID)
-console.log('GitHub Client Secret:', process.env.NEXT_PUBLIC_GITHUB_SECRET_ID)
 
 export const options: NextAuthOptions = {
 
@@ -34,9 +32,6 @@ export const options: NextAuthOptions = {
                 // this is where you need to retrieve user data
                 // to verify with credentials
                 // Docs: https://next-auth.js.or/configuration/providers/credentials
-                console.log('GitHub Client ID:', process.env.NEXTAUTH_URL)
-                console.log('GitHub Client Secret:', process.env.GITHUB_SECRET)
-
                 const testuser = { id: "42", name: "Dave", password: "nextauth" }
                 if (credentials?.username === testuser.name && credentials?.password == testuser.password) {
                     return testuser
