@@ -2,13 +2,19 @@ import Header from '@/components/shared/Header'
 import React from 'react'
 import { transformationTypes } from '@/constants'
 import TransformationForm from '@/components/shared/TransformationForm';
-// import { auth } from '@clerk/nextjs/server';
 import { getUserById } from '@/lib/actions/user.actions';
 import { redirect } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 const AddTransoformationTypePage = async({ params: {type}} : SearchParamProps) => {
   // const { userId } = auth();
   const transformation = transformationTypes[type];
+  const { data: session } = useSession({
+    required: true,
+    onUnauthenticated() {
+      redirect(`/api/auth/signin?callbackUrl=/transformations/add/{transformation.type}`)
+    }
+  })
 
   // if(!userId) redirect('/sign-in');
   

@@ -24,7 +24,7 @@ export async function getUserById(userId: string) {
   try {
     await connectToDatabase();
 
-    const user = await User.findOne({ clerkId: userId });
+    const user = await User.findOne({ userId: userId });
 
     if (!user) throw new Error("User not found");
 
@@ -35,11 +35,11 @@ export async function getUserById(userId: string) {
 }
 
 // UPDATE
-export async function updateUser(clerkId: string, user: UpdateUserParams) {
+export async function updateUser(userId: string, user: UpdateUserParams) {
   try {
     await connectToDatabase();
 
-    const updatedUser = await User.findOneAndUpdate({ clerkId }, user, {
+    const updatedUser = await User.findOneAndUpdate({ userId }, user, {
       new: true,
     });
 
@@ -52,12 +52,12 @@ export async function updateUser(clerkId: string, user: UpdateUserParams) {
 }
 
 // DELETE
-export async function deleteUser(clerkId: string) {
+export async function deleteUser(userId: string) {
   try {
     await connectToDatabase();
 
     // Find user to delete
-    const userToDelete = await User.findOne({ clerkId });
+    const userToDelete = await User.findOne({ userId });
 
     if (!userToDelete) {
       throw new Error("User not found");
@@ -73,6 +73,26 @@ export async function deleteUser(clerkId: string) {
   }
 }
 
+export async function updateUserMetadata(nextAuthUserId: string, metadata: Record<string, any>): Promise<typeof User | null> {
+  try {
+    // Find the user by their ID and update the public metadata
+    const updatedUser = await User.findOneAndUpdate(
+      { userId: nextAuthUserId }, // Assuming `nextAuthId` is the field storing the user's NextAuth.js ID
+      { $set: { publicMetadata: metadata } }, // Update the `publicMetadata` field with the new metadata
+      { new: true } // Return the updated user document
+    );
+
+    if (!updatedUser) {
+      console.error(`User with ID ${nextAuthUserId} not found`);
+      return null;
+    }
+
+    return updatedUser;
+  } catch (error) {
+    console.error("Error updating user metadata:", error);
+    throw new Error("Failed to update user metadata");
+  }
+}
 // USE CREDITS
 export async function updateCredits(userId: string, creditFee: number) {
   try {
