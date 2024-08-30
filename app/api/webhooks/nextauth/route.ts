@@ -1,17 +1,18 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest} from "next/server";
+import { NextApiResponse } from "next";
 import { getToken } from "next-auth/jwt";
 import { createUser, deleteUser, updateUser, updateUserMetadata } from "@/lib/actions/user.actions";
 
-export async function POST(req: NextApiRequest, res: NextApiResponse) {
+export async function POST(req: NextRequest, res: NextApiResponse) {
     const SECRET = process.env.NEXTAUTH_SECRET;
 
     if (!SECRET) {
         throw new Error("Please add NEXTAUTH_SECRET to .env");
     }
 
-    const body = req.body;
-    const signature = req.headers["x-nextauth-signature"];
-    const timestamp = req.headers["x-nextauth-timestamp"];
+    const body = await req.text();
+    const signature = req.headers.get("x-nextauth-signature");
+    const timestamp = req.headers.get("x-nextauth-timestamp")
 
     // Verify the signature
     const verified = await getToken({
@@ -21,11 +22,11 @@ export async function POST(req: NextApiRequest, res: NextApiResponse) {
     });
     if (!verified || verified !== signature) {
         console.error("Error verifying webhook");
-        return res.status(400).json({ message: "Error verifying webhook" });
+        return res.status(400).json({ message: 'Error verifying webhook'});
     }
 
     // Parse the event
-    const eventType = req.headers["x-nextauth-event"];
+    const eventType = req.headers.get("x-nextauth-event")
     const eventPayload = JSON.parse(body);
 
     // CREATE
