@@ -1,3 +1,4 @@
+import LoginForm from '@/components/shared/LoginForm'
 import LoginGithub from '@/components/shared/LoginGithub'
 import React from 'react'
 
@@ -6,7 +7,7 @@ const  SignIn = () => {
     <div className='w-full flex mt-20 justify-center'>
         <section className='flex flex-col w-[400px]'>
             <h1 className='text-3xl w-full text-center font-bold mb-6'>Sign in</h1>
-            {/* TODO login form */}
+            <LoginForm/>
             <LoginGithub/>
         </section>
     </div>
