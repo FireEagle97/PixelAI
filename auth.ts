@@ -16,12 +16,12 @@ export const {
         GitHubProvider({
             clientId: process.env.AUTH_GITHUB_ID! as string,
             clientSecret: process.env.AUTH_GITHUB_SECRET_ID! as string,
-            authorization: {
-                params: {
-                    scope: 'read:user user:email',
-                    redirect_uri: process.env.NEXTAUTH_URL + "/api/auth/callback/github",
-                }
-            },
+            // authorization: {
+            //     params: {
+            //         scope: 'read:user user:email',
+            //         redirect_uri: process.env.NEXTAUTH_URL + "/api/auth/callback/github",
+            //     }
+            // },
 
         }),
         CredentialsProvider({

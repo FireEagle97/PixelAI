@@ -7,7 +7,6 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React from 'react'
 import { Button } from '../ui/button'
-import Logout from './Logout'
 
 function Sidebar() {
     const pathname = usePathname();
@@ -22,6 +21,7 @@ function Sidebar() {
                     {status === 'authenticated' ? (
                         <>
                             <ul className='sidebar-nav_elements'>
+                                {/* {session.user?.name} */}
                                 {navLinks.slice(0, 6).map((link) => {
                                     const isActive = link.route === pathname
                                     return (
@@ -60,19 +60,17 @@ function Sidebar() {
                                         </li>
                                     )
                                 })}
-                                <>
-                                    <Logout/>
-                                </>
-                                {/* <li className='flex-center cursor-pointer gap-2 p-4'>
+                                <li className='flex-center cursor-pointer gap-2 p-4'>
                                     <button onClick={() => signOut()} className='button bg-purple-gradient bg-cover text-white'>
                                         Logout
                                     </button>
-                                </li> */}
+                                </li>
                             </ul>
                         </>
                     ) : (
                         <Button asChild className='button bg-purple-gradient bg-cover'>
                             <Link href="/sign-in">Login</Link>
+                            {/* <Link href="/api/auth/signin">Login</Link> */}
                         </Button>
                     )}
                 </nav>
