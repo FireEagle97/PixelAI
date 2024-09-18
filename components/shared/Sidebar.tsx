@@ -69,7 +69,7 @@ function Sidebar() {
                         </>
                     ) : (
                         <Button asChild className='button bg-purple-gradient bg-cover'>
-                            <Link href="/sign-in">Login</Link>
+                            <Link href="/login">Login</Link>
                             {/* <Link href="/api/auth/signin">Login</Link> */}
                         </Button>
                     )}

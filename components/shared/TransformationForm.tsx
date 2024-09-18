@@ -24,7 +24,7 @@ import {
 
 import { Input } from "@/components/ui/input"
 import { defaultValues, transformationTypes } from "@/constants"
-import { CustomField } from "./CustomField"
+import { CustomField } from "@/components/shared/CustomField"
 
 export const formSchema = z.object({
   title: z.string(),
