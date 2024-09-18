@@ -1,18 +1,43 @@
-import NextAuth from "next-auth"
-import GitHubProvider from "next-auth/providers/github";
+import NextAuth, {DefaultSession} from "next-auth"
 import { PrismaAdapter } from "@auth/prisma-adapter"
-import CredentialsProvider from "next-auth/providers/credentials";
-import bcrypt from "bcryptjs"
 import { db } from "./db";
-import credentials from "next-auth/providers/credentials";
-import { saltAndHashPassword } from "./lib/utils";
 import authConfig from "./auth.config";
+import { getUserById } from "@/data/user";
+import { UserRole } from "@prisma/client";
+declare module "next-auth" {
+    interface Session {
+      user: {
+        role: string
+      } & DefaultSession["user"]
+    }
+  }
+   
 export const {
     handlers: { GET, POST },
     signIn,
     signOut,
     auth,
 } = NextAuth({
+    callbacks: {
+        async session({ token, session}) {
+           if(token.sub && session.user){
+            session.user.id = token.sub;
+           }
+           if(token.role && session.user){
+            session.user.role = token.role as UserRole
+           }
+            return session;
+        }       ,
+        async jwt({token}) {
+            if(!token.sub){
+                return token;
+            }
+            const existingUser = await getUserById(token.sub);
+            if(!existingUser) return token;
+            token.role= existingUser.role;
+            return token;
+        }
+    },
     adapter: PrismaAdapter(db),
     session: { strategy: "jwt" },
     ...authConfig,

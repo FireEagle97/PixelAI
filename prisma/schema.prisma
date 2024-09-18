@@ -26,7 +26,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
-  role          UserRole?  @default(ADMIN)
+  role          UserRole?  @default(USER)
   // Optional for WebAuthn support
   Authenticator Authenticator[]
  
