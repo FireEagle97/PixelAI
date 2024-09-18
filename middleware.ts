@@ -1,26 +1,60 @@
 // export { auth as middleware } from "@/auth";
-
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { auth } from "@/auth";
+import NextAuth from "next-auth";
+import authConfig from "@/auth.config";
+import {
+  DEFAULT_LOGIN_REDIRECT,
+  apiAuthPrefix,
+  authRoutes,
+  publicRoutes
+} from "@/routes";
+const {auth} = NextAuth(authConfig);
 //for example
 const protectedRoutes = ["/middleware"];
+//it will be invoked on every route except the one mentioned in the matcher
+export default auth((req) => {
+  const {nextUrl} = req;
+  const isLoggedIn = !!req.auth;
 
-export default async function middleware(request: NextRequest) {
-  const session = await auth();
-
-  const isProtected = protectedRoutes.some((route) =>
-    request.nextUrl.pathname.startsWith(route)
-  );
-
-  if (!session && isProtected) {
-    const absoluteURL = new URL("/", request.nextUrl.origin);
-    return NextResponse.redirect(absoluteURL.toString());
+  const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
+  const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
+  const isAuthRoute = authRoutes.includes(nextUrl.pathname);
+  //order here matters
+  if(isApiAuthRoute){
+    return;
   }
+  if(isAuthRoute){
+    if(isLoggedIn){
+      return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT,nextUrl))
+    }
+    return;
+  }
+  if(!isLoggedIn && !isPublicRoute){
+    return Response.redirect(new URL("/login",nextUrl))
+  }
+  return;
 
-  return NextResponse.next();
-}
+})
+  
+// export default async function middleware(request: NextRequest) {
+//   const session = await auth();
+
+//   const isProtected = protectedRoutes.some((route) =>
+//     request.nextUrl.pathname.startsWith(route)
+//   );
+
+//   if (!session && isProtected) {
+//     const absoluteURL = new URL("/", request.nextUrl.origin);
+//     return NextResponse.redirect(absoluteURL.toString());
+//   }
+
+//   return NextResponse.next();
+// }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: [// Skip Next.js internals and all static files, unless found in search params
+    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+    // Always run for API routes
+    '/(api|trpc)(.*)',],
 };

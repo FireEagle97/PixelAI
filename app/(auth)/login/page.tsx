@@ -1,6 +1,6 @@
 //(auth) won't be visible in the route
 import LoginForm from '@/components/auth/LoginForm'
-import LoginGithub from '@/components/auth/LoginGithub'
+// import LoginGithub from '@/components/auth/LoginGithub'
 import React from 'react'
 import { CardWrapper } from '@/components/shared/CardWrapper'
 

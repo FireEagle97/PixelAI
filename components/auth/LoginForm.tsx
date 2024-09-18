@@ -33,11 +33,16 @@ const LoginForm = () => {
         setSuccess("")
         startTransition(() => {
             login(values)
-            .then((data) => {
-                setError(data.error)
-                setSuccess(data.success)
-            })
-        })
+                .then((data) => {
+                    if (data) {
+                        setError(data.error || "");  
+                        setSuccess(data.success || ""); 
+                    }
+                })
+                .catch((err) => {
+                    setError("An error occurred during login.");
+                });
+        });
       
     }
     return (
