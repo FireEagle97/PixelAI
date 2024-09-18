@@ -12,7 +12,8 @@ export const publicRoutes = ["/"]
  */
 export const authRoutes = [
     "/login",
-    "/register"
+    "/register",
+    "/error"
 ]
 /**
  * The prefix for API authentication routes

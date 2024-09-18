@@ -17,7 +17,11 @@ import { Button } from "@/components/ui/button";
 import { FormError } from "@/components/shared/FormError";
 import { FormSuccess } from "../shared/FormSucess";
 import { login } from "@/lib/actions/login";
+import { useSearchParams } from "next/navigation";
 const LoginForm = () => {
+    const searchParams = useSearchParams();
+    const urlError = searchParams.get("error") === "OAuthAccountNotLinked"
+     ? "Email already in user with different provider!" : "";
     const [error, setError] = useState<string | undefined>("");
     const [success, setSuccess] = useState<string | undefined>("");
     const [isPending, startTransition] = useTransition();
@@ -91,7 +95,7 @@ const LoginForm = () => {
                     >
                     </FormField>
                 </div>
-                <FormError message={error}/>
+                <FormError message={error || urlError}/>
                 <FormSuccess message={success}/>
                 <Button 
                     type="submit"
