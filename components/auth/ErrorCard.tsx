@@ -1,11 +1,3 @@
-import Header from "@/components/shared/Header";
-import { BackButton } from "@/components/auth/BackButton";
-import {
-    Card,
-    CardFooter,
-    CardContent,
-    CardHeader
-} from '@/components/ui/card';
 import { CardWrapper } from "../shared/CardWrapper";
 import { FaExclamationTriangle } from "react-icons/fa";
 

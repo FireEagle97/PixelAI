@@ -2,20 +2,22 @@
 
 import * as z from "zod";
 import bcrypt from "bcrypt";
-import {db} from "@/db";
-import {getUserByEmail} from "@/data/user"
-import {RegisterSchema } from "@/schemas";
+import { db } from "@/lib/db";
+import { getUserByEmail } from "@/data/user"
+import { RegisterSchema } from "@/schemas";
+import { generateVerificationToken } from "@/lib/tokens";
+import { sendVerificationEmail } from "../mail";
 export const register = async (values: z.infer<typeof RegisterSchema>) => {
     const validatedFields = RegisterSchema.safeParse(values);
 
-    if(!validatedFields.success){
-        return {error: "Invalid Credentials!"};
+    if (!validatedFields.success) {
+        return { error: "Invalid Credentials!" };
     }
-    const { email, password, name} = validatedFields.data;
-    const hashedPassword = await bcrypt.hash(password,10);
+    const { email, password, name } = validatedFields.data;
+    const hashedPassword = await bcrypt.hash(password, 10);
     const existingUser = await getUserByEmail(email);
-    if(existingUser){
-        return { error: "Email already in use!"}
+    if (existingUser) {
+        return { error: "Email already in use!" }
     }
     await db.user.create({
         data: {
@@ -24,7 +26,11 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
             hashedPassword: hashedPassword,
         }
     });
+    const verificationToken = await generateVerificationToken(email);
 
-    //TODO: Send verification token email
-    return {success: "User created!"}
+    await sendVerificationEmail(
+        verificationToken.identifier,
+        verificationToken.token,
+    )
+    return { success: "Confirmation email sent!" }
 }

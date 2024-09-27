@@ -1,6 +1,6 @@
 "use server"
 import { signIn, signOut } from "@/auth";
-import { db } from "@/db";
+import { db } from "@/lib/db";
 import { sign } from "crypto";
 import { AuthError } from "next-auth";
 import { revalidatePath } from "next/cache";
