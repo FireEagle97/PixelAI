@@ -75,6 +75,14 @@ model VerificationToken {
  
   @@unique([identifier, token])
 }
+model PasswordResetToken {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  email      String
+  token      String
+  expires    DateTime
+ 
+  @@unique([email, token])
+}
  
 // Optional for WebAuthn support
 model Authenticator {

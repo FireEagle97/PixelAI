@@ -2,12 +2,11 @@ import ResetForm from "@/components/auth/ResetForm";
 import { CardWrapper } from "@/components/shared/CardWrapper";
 
 const ResetPage = () => {
-    return (
-        <CardWrapper
+  return (
+    <CardWrapper
       headerTitle='Forgot your password?'
       backButtonHref='/login'
       backButtonLabel="Back to login"
-      showSocial
     >
       <div className='w-full flex justify-center'>
         <section className='flex flex-col w-[400px]'>
@@ -15,6 +14,6 @@ const ResetPage = () => {
         </section>
       </div>
     </CardWrapper>
-    )
+  )
 }
 export default ResetPage;
