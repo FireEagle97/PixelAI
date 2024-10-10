@@ -22,9 +22,9 @@ export default {
                 if (validateFields.success) {
                     const { email, password } = validateFields.data;
                     const user = await getUserByEmail(email);
-                    if (!user || !user.hashedPassword) return null;
+                    if (!user || !user.password) return null;
 
-                    const passwordsMatch = await bcrypt.compare(password, user.hashedPassword);
+                    const passwordsMatch = await bcrypt.compare(password, user.password);
                     if (passwordsMatch) return user;
                 }
                 return null;

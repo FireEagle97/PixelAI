@@ -34,7 +34,7 @@ export const newPassword = async (
     const hashedPassword = saltAndHashPassword(password);
     await db.user.update({
         where: {id: existingUser.id},
-        data: {hashedPassword: hashedPassword},
+        data: {password: hashedPassword},
     });
     await db.passwordResetToken.delete({
         where: { id: existingToken.id}
