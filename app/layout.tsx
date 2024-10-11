@@ -6,8 +6,7 @@ import MobileNav from '@/components/shared/MobileNav';
 import Sidebar from '@/components/shared/Sidebar';
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
-// import AuthProvider from "./context/AuthProvider";
-// import { ClerkProvider, SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+
 
 const IBMPlex = IBM_Plex_Sans({
   subsets: ["latin"],
@@ -28,9 +27,6 @@ export default async function RootLayout({
 }>) {
   const session = await auth();
   return (
-    // <ClerkProvider appearance={{
-    //   variables: {colorPrimary: '#624cf5'}
-    // }}>
     <SessionProvider session={session}>
       <html lang="en">
         <body className={cn("font-IBMPlex antialiased", IBMPlex.variable)}>

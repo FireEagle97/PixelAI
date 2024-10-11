@@ -1,9 +1,10 @@
-import {auth} from "@/auth";
-const SettingsPage = async() => {
-    const session = await auth();
+"use client"
+import { useCurrentUser } from "@/hooks/use-current-session";
+const SettingsPage = () => {
+    const user =  useCurrentUser();
     return (
         <div>
-            {JSON.stringify(session)}
+            {JSON.stringify(user)}
         </div>
     );
 }

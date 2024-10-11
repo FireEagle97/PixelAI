@@ -6,11 +6,10 @@ import { getUserById } from "@/data/user";
 import { UserRole } from "@prisma/client";
 import { isGeneratorFunction } from "util/types";
 import { getTwoFactorConfirmationByUserId } from "./data/TwoFactorConfirmation";
+import { ExtendedUser } from "./next-auth";
 declare module "next-auth" {
   interface Session {
-    user: {
-      role: string
-    } & DefaultSession["user"]
+    user: ExtendedUser
   }
 }
 
@@ -58,6 +57,9 @@ export const {
       if (token.role && session.user) {
         session.user.role = token.role as UserRole
       }
+      if (session.user) {
+        session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
+      }
       return session;
     },
     async jwt({ token }) {
@@ -67,6 +69,7 @@ export const {
       const existingUser = await getUserById(token.sub);
       if (!existingUser) return token;
       token.role = existingUser.role;
+      token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
       return token;
     }
   },
