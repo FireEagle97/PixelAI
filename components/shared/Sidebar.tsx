@@ -71,7 +71,7 @@ function Sidebar() {
                             </ul>
                         </>
                     ) : (
-                        <LoginButton asChild mode="modal">
+                        <LoginButton asChild mode="redirect">
                             <Button  className='button bg-purple-gradient bg-cover'>
                                 Login
                             </Button>
