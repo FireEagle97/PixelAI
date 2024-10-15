@@ -15,8 +15,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FormError } from "@/components/shared/FormError";
-import { FormSuccess } from "../shared/FormSucess";
+import { FormSuccess } from "@/components/shared/FormSucess";
 import { register } from "@/lib/actions/register";
+import { CardWrapper } from "../shared/CardWrapper";
 const RegisterForm = () => {
     const [error, setError] = useState<string | undefined>("");
     const [success, setSuccess] = useState<string | undefined>("");
@@ -42,6 +43,12 @@ const RegisterForm = () => {
       
     }
     return (
+        <CardWrapper
+        headerTitle='Create an account'
+        backButtonHref='/login'
+        backButtonLabel="Already have an account?"
+        showSocial
+      >
         <Form {...form}>
             <form
                 onSubmit={form.handleSubmit(onSubmit)}
@@ -118,6 +125,7 @@ const RegisterForm = () => {
             </form>
 
         </Form>
+        </CardWrapper>
     )
 }
 export default RegisterForm;

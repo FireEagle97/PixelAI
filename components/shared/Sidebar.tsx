@@ -7,7 +7,8 @@ import { usePathname } from 'next/navigation'
 import React from 'react'
 import { Button } from '../ui/button'
 import { useCurrentUser } from '@/hooks/use-current-session'
-import { Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { LoginButton } from '../auth/LoginButton'
 
 function Sidebar() {
     const pathname = usePathname();
@@ -70,9 +71,12 @@ function Sidebar() {
                             </ul>
                         </>
                     ) : (
-                        <Button asChild className='button bg-purple-gradient bg-cover'>
-                            <Link href="/login">Login</Link>
-                        </Button>
+                        <LoginButton asChild mode="modal">
+                            <Button  className='button bg-purple-gradient bg-cover'>
+                                Login
+                            </Button>
+                        </LoginButton>
+
                     )}
                 </nav>
             </div>

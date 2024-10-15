@@ -61,6 +61,12 @@ const LoginForm = () => {
 
     }
     return (
+        <CardWrapper
+        headerTitle="Welcome back"
+        backButtonLabel="Don't have an account?"
+        backButtonHref="/register"
+        showSocial
+      >
         <Form {...form}>
             <form
                 onSubmit={form.handleSubmit(onSubmit)}
@@ -152,6 +158,7 @@ const LoginForm = () => {
             </form>
 
         </Form>
+        </CardWrapper>
     )
 }
 

@@ -15,14 +15,6 @@ async function Home() {
     </div>
 
 
-    // <>
-    // {session ? (
-    //   <RootLayout>{children}</RootLayout>
-    // ) : (
-    //   <h1 className="text-5xl">You shall not pass!</h1> 
-    // )}
-    //   </>
-
   )
 }
 
