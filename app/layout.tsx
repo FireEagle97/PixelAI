@@ -6,7 +6,8 @@ import MobileNav from '@/components/shared/MobileNav';
 import Sidebar from '@/components/shared/Sidebar';
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
-import { Toaster } from "@/components/ui/sonner";
+import { ToastSonner } from "@/components/ui/sonner";
+import { Toaster } from "@/components/ui/toaster";
 
 
 const IBMPlex = IBM_Plex_Sans({
@@ -38,6 +39,7 @@ export default async function RootLayout({
             <MobileNav />
             <div className='root-container'>
               <div className='wrapper'>
+                <ToastSonner/>
                 <Toaster/>
                 {children}
               </div>
