@@ -28,6 +28,8 @@ import { CustomField } from "@/components/shared/CustomField"
 import { useState, useTransition } from "react"
 import { AspectRatioKey, debounce, deepMergeObjects } from "@/lib/utils"
 import MediaUploader from "./MediaUploader"
+import TransformedImage from "./TransformedImage"
+import { updateCredits } from "@/data/user"
 
 export const formSchema = z.object({
   title: z.string(),
@@ -43,7 +45,7 @@ export function TransformationForm({ action, data = null, userId, type, creditBa
   const [image, setImage] = useState(data);
   const [newTransformation, setNewTransformation] = useState<Transformations | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isTrasformating, setIsTransforming] = useState(false);
+  const [isTransformating, setIsTransforming] = useState(false);
   const [transformationConfig, setTrasformationConfig] = useState(config);
   const [isPending, startTransition] = useTransition()
   const initialValues = data && action == "Update" ? {
@@ -87,7 +89,7 @@ export function TransformationForm({ action, data = null, userId, type, creditBa
       return onChangeField(value);
     }, 1000);
   }
-  // TODO: Return to update Credits
+  // TODO: Update credit fee to something else if needed
   const onTrasformHandler= async() => {
     setIsTransforming(true);
     setTrasformationConfig(
@@ -95,7 +97,7 @@ export function TransformationForm({ action, data = null, userId, type, creditBa
     )
     setNewTransformation(null)
     startTransition(async () => {
-        // await updateCredits(userId , creditFee)
+        await updateCredits(userId , -1)
     })
 
   }
@@ -198,13 +200,20 @@ export function TransformationForm({ action, data = null, userId, type, creditBa
                 />
             )}
           />
-
+          <TransformedImage
+            image={image}
+            type={type}
+            title={form.getValues().title}
+            isTransforming={isTransformating}
+            setIsTransforming={setIsTransforming}
+            transformationConfig={transformationConfig}
+          />
         </div>
         <div className="flex flex-col gap-4">
-          <Button className="submit-button capitalize" type="button" disabled={isTrasformating || newTransformation === null}
+          <Button className="submit-button capitalize" type="button" disabled={isTransformating || newTransformation === null}
             onClick={onTrasformHandler}
           >
-            {isTrasformating ? 'Transforming...' : 'Apply Trasformation'}
+            {isTransformating ? 'Transforming...' : 'Apply Trasformation'}
           </Button>
           <Button className="submit-button capitalize" type="submit" disabled={isSubmitting}>Submit</Button>
         </div>
