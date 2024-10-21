@@ -26,6 +26,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  creditBalance Int @default(10)
   role          UserRole?  @default(USER)
   isTwoFactorEnabled Boolean @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
