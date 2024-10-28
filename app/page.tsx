@@ -1,18 +1,47 @@
+import { Collection } from '@/components/shared/Collection'
+import { navLinks } from '@/constants'
+import { getAllImages } from '@/lib/actions/image.actions'
+import { currentUser } from '@/lib/auth'
+import Image from 'next/image'
+import Link from 'next/link'
 import React from 'react'
-import MobileNav from '@/components/shared/MobileNav';
-import Sidebar from '@/components/shared/Sidebar';
-// import { options } from "./api/auth/[...nextauth]/options"
-// import { getServerSession } from "next-auth/next"
-import RootLayout from './layout'
-async function Home() {
-  //example of protecting home page
-  // const session = await getServerSession(options)
+const Home = async ({ searchParams }: SearchParamProps) => {
+  const page = Number(searchParams?.page) || 1;
+  const searchQuery = (searchParams?.query as string) || '';
+  const user = await currentUser();
+  const images = await getAllImages({ page, searchQuery, userId: user?.id ?? ""})
   return (
 
-    <div>
-      <h1 className="text-3xl font-bold">Welcome to the Homepage!</h1>
-      <p>This is the main content of the homepage.</p>
-    </div>
+    <>
+    <section className="home">
+      <h1 className="home-heading">
+        Unleash Your Creative Vision with Imaginify
+      </h1>
+      <ul className="flex-center w-full gap-20">
+        {navLinks.slice(1, 5).map((link) => (
+          <Link
+            key={link.route}
+            href={link.route}
+            className="flex-center flex-col gap-2"
+          >
+            <li className="flex-center w-fit rounded-full bg-white p-4">
+              <Image src={link.icon} alt="image" width={24} height={24} />
+            </li>
+            <p className="p-14-medium text-center text-white">{link.label}</p>
+          </Link>
+        ))}
+      </ul>
+    </section>
+
+    <section className="sm:mt-12">
+      <Collection 
+        hasSearch={true}
+        images={images?.data}
+        totalPages={images?.totalPages}
+        page={page}
+      />
+    </section>
+  </>
 
 
   )

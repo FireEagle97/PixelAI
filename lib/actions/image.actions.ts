@@ -4,8 +4,9 @@ import { db } from "../db";
 import { handleError } from "../utils";
 import { getUserById } from "@/data/user";
 import { redirect } from "next/navigation";
+import { v2 as cloudinary} from 'cloudinary';
 
-const getImageWithAuthor = async (imageId: string) => {
+const populateUser = async (imageId?: string) => {
     const image = await db.image.findUnique({
         where: {
             id: imageId,  // Use the appropriate identifier for the image
@@ -93,9 +94,72 @@ export async function deleteImage(imageId: string) {
 // GET IMAGE
 export async function getImageById(imageId: string) {
     try {
-        const image = await getImageWithAuthor(imageId);
+        const image = await populateUser(imageId);
         if(!image) throw new Error("Image not found");
         return JSON.parse(JSON.stringify(image))
+    } catch (error) {
+        handleError(error);
+
+    }
+}
+// GET IMAGES
+export async function getAllImages({ limit = 9, page = 1, searchQuery = '', userId} : {
+    limit?: number;
+    page: number;
+    searchQuery?: string;
+    userId: string;
+}) {
+    if (!userId) {
+        throw new Error("User ID is required");
+    }
+    try {
+        cloudinary.config({
+            cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+            api_key: process.env.CLOUDINARY_API_KEY,
+            api_secret: process.env.CLOUDINARY_API_SECRET,
+            secure: true,
+
+        })
+        let expression = 'folder=pixelai'
+        if(searchQuery){
+            expression += ` AND ${searchQuery}`
+        }
+        console.log(searchQuery)
+        const {resources} = await cloudinary.search.expression(expression).execute();
+        const resourceIds = resources.map((resource: any) => resource.public_id);  
+        const skipAmount = (Number(page) -1) * limit;
+        const [images, totalImages] = await Promise.all([
+            db.image.findMany({
+                where: {
+                    authorId: userId,
+                    ...(resourceIds.length > 0 && {
+                        publicId: {
+                            in: resourceIds,
+                        },
+                    }),
+                },
+                orderBy: {
+                    updatedAt: 'desc',
+                },
+                take: limit,
+                skip: skipAmount,
+            }),
+            db.image.count({
+                where: {
+                    authorId: userId,
+                    ...(resourceIds.length > 0 && {
+                        publicId: {
+                            in: resourceIds,
+                        },
+                    }),
+                },
+            }),
+        ]);
+        return {
+            data: images,
+            totalPages: Math.ceil(totalImages / limit),
+        };
+
     } catch (error) {
         handleError(error);
 
