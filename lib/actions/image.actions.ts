@@ -53,22 +53,23 @@ export async function updateImage({ image, userId, path }: UpdateImageParams) {
     try {
         const imageToUpdate = await db.image.findUnique({
             where: {
-                id: image._id
+                id: image.id
             }
         })
         if (!imageToUpdate || imageToUpdate.authorId !== userId) {
             throw new Error("Unauthorized or image not found");
         }
+        const { id, ...imageWithoutId} = image;
         const updatedImage = await db.image.update({
             where: {
                 id: imageToUpdate.id
             },
             data: {
-                ...image,
+                ...imageWithoutId,
             }
         })
         revalidatePath(path);
-        return JSON.parse(JSON.stringify(updateImage))
+        return JSON.parse(JSON.stringify(updatedImage));
     } catch (error) {
         handleError(error);
 
@@ -100,6 +101,13 @@ export async function getImageById(imageId: string) {
     } catch (error) {
         handleError(error);
 
+    }
+}
+export async function getImageUrl(imageId: string){
+    try{
+        
+    }catch(error){
+        handleError(error);
     }
 }
 // GET IMAGES

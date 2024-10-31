@@ -69,7 +69,7 @@ model Image {
   transformationType String
   publicId           String
   secureURL          String
-  width              Int | undefined // Optional field
+  width              Int? // Optional field
   height             Int? // Optional field
   config             Json? // Prisma uses Json type for objects
   transformationURL  String? // Optional field

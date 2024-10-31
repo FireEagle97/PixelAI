@@ -82,13 +82,14 @@ export function TransformationForm({ action, data = null, userId, type, creditBa
         width: image?.width,
         height: image?.height,
         config: transformationConfig,
-        secureURL: image?.secureUrl,
-        transformationURL,
+        secureURL: image?.secureURL,
+        transformationURL: transformationURL,
         aspectRatio: values.aspectRatio,
         prompt: values.prompt,
         color: values.color
       }
       if (action === 'Add') {
+        console.log(imageData)
         try {
           const newImage = await addImage({
             image: imageData,
@@ -106,18 +107,19 @@ export function TransformationForm({ action, data = null, userId, type, creditBa
         }
       }
       if (action === 'Update') {
+        console.log(imageData)
         try {
           const updatedImage = await updateImage({
             image: {
               ...imageData,
-              _id: data.id
+              id: data.id
             },
             userId,
-            path: `/transformations/${data._id}`
+            path: `/transformations/${data.id}`
 
           })
           if (updatedImage) {
-            router.push(`/transformations/${updatedImage._id}`)
+            router.push(`/transformations/${updatedImage.id}`)
           }
         } catch (error) {
           console.log(error);
@@ -146,8 +148,8 @@ export function TransformationForm({ action, data = null, userId, type, creditBa
           [fieldName === 'prompt' ? 'prompt' : 'to']: value
         }
       }))
-      return onChangeField(value);
-    }, 1000);
+    }, 1000)();
+    return onChangeField(value);
   }
   // TODO: Update credit fee to something else if needed
   const onTransformHandler = async () => {
@@ -189,6 +191,7 @@ export function TransformationForm({ action, data = null, userId, type, creditBa
                 onValueChange={(value) =>
                   onSelectFieldHandler(value, field.onChange)
                 }
+                value={field.value}
               >
 
                 <SelectTrigger className="select-field">
@@ -216,7 +219,7 @@ export function TransformationForm({ action, data = null, userId, type, creditBa
                 type === 'remove' ? 'Object to remove' : 'Object to recolor'
               }
               className="w-full"
-              render={(({ field }) => (
+              render={({ field }) => (
                 <Input
                   value={field.value}
                   className="input-field"
@@ -227,7 +230,7 @@ export function TransformationForm({ action, data = null, userId, type, creditBa
                     field.onChange
                   )}
                 />
-              ))}
+              )}
             />
             {type === 'recolor' && (
               <CustomField

@@ -50,7 +50,7 @@ const TransformedImage = ({ image, type, title, transformationConfig, isTransfor
                         onError={() => {
                             debounce(() => {
                                 setIsTransforming && setIsTransforming(false);
-                            }, 8000)
+                            }, 8000)()
                         }}
                         {...transformationConfig}
                     />

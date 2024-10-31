@@ -46,7 +46,6 @@ function Sidebar() {
                             <ul className='sidebar-nav_elements'>
                                 {navLinks.slice(6).map((link) => {
                                     const isActive = link.route === pathname
-                                    console.log(link.label)
                                     return (
                                         <li key={link.route} className={`sidebar-nav_element group
                         ${isActive ? 'bg-purple-gradient text-white' : 'text-gray-700'}`}>

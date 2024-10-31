@@ -117,9 +117,15 @@ export const download = (url: string, filename: string) => {
   }
 
   fetch(url)
-    .then((response) => response.blob())
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.blob();
+    })
     .then((blob) => {
       const blobURL = URL.createObjectURL(blob);
+      console.log(blobURL)
       const a = document.createElement("a");
       a.href = blobURL;
 
@@ -127,13 +133,16 @@ export const download = (url: string, filename: string) => {
         a.download = `${filename.replace(" ", "_")}.png`;
       document.body.appendChild(a);
       a.click();
+      // Clean up and revoke the object URL
+      URL.revokeObjectURL(blobURL);
+      document.body.removeChild(a); // Remove the anchor element from the DOM
     })
     .catch((error) => console.log({ error }));
 };
 
 // DEEP MERGE OBJECTS
 export const deepMergeObjects = (obj1: any, obj2: any) => {
-  if(obj2 === null || obj2 === undefined) {
+  if (obj2 === null || obj2 === undefined) {
     return obj1;
   }
 

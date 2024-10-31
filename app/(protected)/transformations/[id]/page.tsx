@@ -8,6 +8,7 @@ import { getImageById } from "@/lib/actions/image.actions";
 import { getImageSize } from "@/lib/utils";
 import { currentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import { DeleteConfirmation } from "@/components/shared/DeleteConfirmation";
 // import { DeleteConfirmation } from "@/components/shared/DeleteConfirmation";
 
 const ImageDetails = async ({ params: { id } }: SearchParamProps) => {
@@ -15,7 +16,6 @@ const ImageDetails = async ({ params: { id } }: SearchParamProps) => {
     if (!user?.id) redirect('/login')
 
     const image = await getImageById(id);
-
     return (
         <>
             <Header title={image.title} />
@@ -85,15 +85,15 @@ const ImageDetails = async ({ params: { id } }: SearchParamProps) => {
                     />
                 </div>
 
-                {user.id === image.author.clerkId && (
+                {user.id === image.author.id && (
                     <div className="mt-4 space-y-4">
                         <Button asChild type="button" className="submit-button capitalize">
-                            <Link href={`/transformations/${image._id}/update`}>
+                            <Link href={`/transformations/${image.id}/update`}>
                                 Update Image
                             </Link>
                         </Button>
 
-                        {/* <DeleteConfirmation imageId={image._id} /> */}
+                        <DeleteConfirmation imageId={image.id} />
                     </div>
                 )}
             </section>

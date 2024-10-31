@@ -2,9 +2,11 @@
   "name": "imaginify",
   "version": "0.1.0",
   "private": true,
+  "type": "module", 
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "dev:debug": "set NODE_OPTIONS=\"--inspect\" && next dev",
     "start": "next start",
     "lint": "next lint",
     "postinstall": "prisma generate"
