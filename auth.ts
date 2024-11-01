@@ -59,7 +59,7 @@ export const {
       }
       if (session.user) {
         session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
-        session.user.creditBalance = token.creditBalance as Number;
+        session.user.creditBalance = token.creditBalance as number;
       }
       return session;
     },
