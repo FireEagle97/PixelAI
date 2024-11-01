@@ -32,35 +32,48 @@ export const {
     }
   },
   callbacks: {
-    async signIn({ user, account}){
+    async signIn({ user, account }) {
+      // Ensure user has an ID
+      if (!user?.id) return false;
       //Allow OAuth without email verification
-      if(account?.provider !== "credentials") return true;
-      const existingUser = user.id ? await getUserById(user.id) : null;
+      if (account?.provider !== "credentials") return true;
+      // const existingUser = user.id ? await getUserById(user.id) : null;
+      const existingUser = await getUserById(user.id);
       //Prevent sign in without email verification
-      if(!existingUser?.emailVerified) return false;
+      if (!existingUser?.emailVerified) return false;
 
-      if(existingUser.isTwoFactorEnabled){
+      if (existingUser.isTwoFactorEnabled) {
         const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(existingUser.id);
-        if(!twoFactorConfirmation) return false
+        if (!twoFactorConfirmation) return false
         //Delete two factor confirmation for next sign in
         await db.twoFactorConfirmation.delete({
-          where: {id: twoFactorConfirmation.id}
+          where: { id: twoFactorConfirmation.id }
         })
       }
 
       return true;
     },
     async session({ token, session }) {
-      if (token.sub && session.user) {
-        session.user.id = token.sub;
+      if (!token.sub) {
+        throw new Error("No user ID in token");
       }
-      if (token.role && session.user) {
-        session.user.role = token.role as UserRole
-      }
+
       if (session.user) {
-        session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
-        session.user.creditBalance = token.creditBalance as number;
+        session.user.id = token.sub;
+        session.user.role = token.role as UserRole;
+        session.user.isTwoFactorEnabled = !!token.isTwoFactorEnabled;
+        session.user.creditBalance = token.creditBalance || 0;
       }
+      // if (token.sub && session.user) {
+      //   session.user.id = token.sub;
+      // }
+      // if (token.role && session.user) {
+      //   session.user.role = token.role as UserRole
+      // }
+      // if (session.user) {
+      //   session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
+      //   session.user.creditBalance = token.creditBalance as number;
+      // }
       return session;
     },
     async jwt({ token }) {
