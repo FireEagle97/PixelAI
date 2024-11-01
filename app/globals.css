@@ -75,6 +75,7 @@
   }
 }
 
+
 .auth {
   @apply flex-center min-h-screen w-full bg-purple-100
 }
@@ -90,6 +91,10 @@
 /* ========================================== TAILWIND STYLES */
 @layer utilities {
   /* ===== UTILITIES */
+    .max-h {
+      max-height: calc(100vh);
+    }
+  
   .wrapper {
     @apply max-w-5xl mx-auto px-5 md:px-10 w-full text-dark-400 p-16-regular;
   }
@@ -303,6 +308,12 @@
 
   .header-nav_elements {
     @apply mt-8 flex w-full flex-col items-start gap-5;
+  }
+  @media (max-width: 640px) { /* Mobile screens */
+    .header-nav_elements {
+      max-height: calc(100vh - 4rem); 
+      overflow-y: auto; 
+    }
   }
 
   /* Search Component */

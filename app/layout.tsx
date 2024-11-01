@@ -29,14 +29,14 @@ export default async function RootLayout({
 }>) {
   const session = await auth();
   return (
-    <SessionProvider session={session}>
+    <SessionProvider session={session} refetchInterval={0} refetchOnWindowFocus={true}>
       <html lang="en">
         <body className={cn("font-IBMPlex antialiased", IBMPlex.variable)}>
           <header>
           </header>
           <main className="root">
-            <Sidebar />
-            <MobileNav />
+          {session &&<Sidebar serverSession={session} />}
+          {session && <MobileNav/>}
             <div className='root-container'>
               <div className='wrapper'>
                 <ToastSonner/>

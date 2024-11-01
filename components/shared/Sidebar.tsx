@@ -5,15 +5,15 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React from 'react'
-import { Button } from '../ui/button'
 import { useCurrentUser } from '@/hooks/use-current-session'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { LoginButton } from '../auth/LoginButton'
-
-function Sidebar() {
+import { Button } from '../ui/button'
+// import { Button } from '../ui/button'
+// import { LoginButton } from '../auth/LoginButton'
+  
+export  const Sidebar = ( {serverSession} : SidebarProps) => {
     const pathname = usePathname();
     const currentUser = useCurrentUser();
-    const { data: session, status } = useSession()
     return (
         <aside className='sidebar'>
             <div className='flex size-full flex-col gap-4'>
@@ -21,7 +21,7 @@ function Sidebar() {
                     <Image src="/assets/images/logo-text.svg" alt="logo" width={180} height={28} />
                 </Link>
                 <nav className='sidebar-nav'>
-                    {status === 'authenticated' ? (
+                    {serverSession  && (
                         <>
                             <ul className='sidebar-nav_elements'>
                                 {navLinks.slice(0, 6).map((link) => {
@@ -63,19 +63,20 @@ function Sidebar() {
                                     )
                                 })}
                                 <li className='flex-center cursor-pointer gap-2 p-4'>
-                                    <button onClick={() => signOut()} className='button bg-purple-gradient bg-cover text-white'>
+                                    <Button onClick={() => signOut()} className='button bg-purple-gradient bg-cover text-white'>
                                         Logout
-                                    </button>
+                                    </Button>
                                 </li>
                             </ul>
                         </>
-                    ) : (
-                        <LoginButton asChild mode="redirect">
-                            <Button  className='button bg-purple-gradient bg-cover'>
-                                Login
-                            </Button>
-                        </LoginButton>
+                    // ) : (
+                    //     <LoginButton asChild mode="redirect">
+                    //         <Button  className='button bg-purple-gradient bg-cover'>
+                    //             Login
+                    //         </Button>
+                    //     </LoginButton>
                        
+                    // )
                     )}
                 </nav>
             </div>

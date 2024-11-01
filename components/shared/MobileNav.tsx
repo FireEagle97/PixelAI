@@ -11,6 +11,7 @@ import Image from 'next/image'
 import { navLinks } from '@/constants'
 import { usePathname } from 'next/navigation'
 import { Button } from '../ui/button'
+import { signOut } from 'next-auth/react'
 
 
 function MobileNav() {
@@ -71,8 +72,9 @@ function MobileNav() {
 
                 {/* </SignedIn>
                 <SignedOut> */}
-                <Button asChild className='button bg-purple-gradient bg-cover'>
-                    <Link href="/sign-in">Login</Link>
+                <Button onClick={() => signOut()} className='button bg-purple-gradient bg-cover'>
+                    Logout
+                    {/* <Link href="/sign-in">Logout</Link> */}
                 </Button>
                 {/* </SignedOut> */}
 
