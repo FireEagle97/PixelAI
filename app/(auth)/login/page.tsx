@@ -1,7 +1,6 @@
 //(auth) won't be visible in the route
 import LoginForm from '@/components/auth/LoginForm'
 import React from 'react'
-import { CardWrapper } from '@/components/shared/CardWrapper'
 
 const Login = () => {
   return (

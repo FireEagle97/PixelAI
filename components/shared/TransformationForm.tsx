@@ -89,7 +89,7 @@ export function TransformationForm({ action, data = null, userId, type, creditBa
         color: values.color
       }
       if (action === 'Add') {
-        console.log(imageData)
+
         try {
           const newImage = await addImage({
             image: imageData,
@@ -107,7 +107,6 @@ export function TransformationForm({ action, data = null, userId, type, creditBa
         }
       }
       if (action === 'Update') {
-        console.log(imageData)
         try {
           const updatedImage = await updateImage({
             image: {

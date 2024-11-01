@@ -40,7 +40,6 @@ export async function addImage({ image, userId, path }: AddImageParams) {
                 }
             }
         })
-        console.log(newImage)
         revalidatePath(path);
         return JSON.parse(JSON.stringify(newImage))
     } catch (error) {

@@ -125,7 +125,6 @@ export const download = (url: string, filename: string) => {
     })
     .then((blob) => {
       const blobURL = URL.createObjectURL(blob);
-      console.log(blobURL)
       const a = document.createElement("a");
       a.href = blobURL;
 
