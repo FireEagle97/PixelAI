@@ -132,7 +132,6 @@ export async function getAllImages({ limit = 9, page = 1, searchQuery = '', user
         if(searchQuery){
             expression += ` AND ${searchQuery}`
         }
-        console.log(searchQuery)
         const {resources} = await cloudinary.search.expression(expression).execute();
         const resourceIds = resources.map((resource: any) => resource.public_id);  
         const skipAmount = (Number(page) -1) * limit;
@@ -173,3 +172,41 @@ export async function getAllImages({ limit = 9, page = 1, searchQuery = '', user
 
     }
 }
+// GET IMAGES BY USER
+export async function getUserImages({
+    limit = 9,
+    page = 1,
+    userId,
+  }: {
+    limit?: number;
+    page: number;
+    userId: string;
+  }) {
+    try {
+      const skipAmount = (Number(page) - 1) * limit;
+  
+      const [images, totalImages] = await Promise.all([
+        db.image.findMany({
+            where: {
+                authorId: userId,
+            },
+            orderBy: {
+                updatedAt: 'desc',
+            },
+            take: limit,
+            skip: skipAmount,
+        }),
+        db.image.count({
+            where: {
+                authorId: userId,
+            },
+        }),
+    ]);
+      return {
+        data: JSON.parse(JSON.stringify(images)),
+        totalPages: Math.ceil(totalImages / limit),
+      };
+    } catch (error) {
+      handleError(error);
+    }
+  }
