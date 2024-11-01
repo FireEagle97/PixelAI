@@ -1,5 +1,4 @@
 import { Collection } from '@/components/shared/Collection'
-import Sidebar from '@/components/shared/Sidebar'
 import { navLinks } from '@/constants'
 import { getAllImages } from '@/lib/actions/image.actions'
 import { currentUser } from '@/lib/auth'
