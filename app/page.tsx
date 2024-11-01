@@ -4,12 +4,16 @@ import { getAllImages } from '@/lib/actions/image.actions'
 import { currentUser } from '@/lib/auth'
 import Image from 'next/image'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 import React from 'react'
 const Home = async ({ searchParams }: SearchParamProps) => {
   const page = Number(searchParams?.page) || 1;
   const searchQuery = (searchParams?.query as string) || '';
   const user = await currentUser();
-  const images = await getAllImages({ page, searchQuery, userId: user?.id ?? ""})
+  if (!user) {
+    redirect('/login');
+  }
+  const images = await getAllImages({ page, searchQuery, userId: user.id})
   return (
 
     <>

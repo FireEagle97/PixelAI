@@ -114,11 +114,8 @@ export async function getAllImages({ limit = 9, page = 1, searchQuery = '', user
     limit?: number;
     page: number;
     searchQuery?: string;
-    userId: string;
+    userId: string | null;
 }) {
-    if (!userId) {
-        throw new Error("User ID is required");
-    }
     try {
         cloudinary.config({
             cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -134,6 +131,13 @@ export async function getAllImages({ limit = 9, page = 1, searchQuery = '', user
         const {resources} = await cloudinary.search.expression(expression).execute();
         const resourceIds = resources.map((resource: any) => resource.public_id);  
         const skipAmount = (Number(page) -1) * limit;
+        if (!userId) {
+            return {
+              data: [],
+              totalPages: 0,
+            };
+          }
+      
         const [images, totalImages] = await Promise.all([
             db.image.findMany({
                 where: {
