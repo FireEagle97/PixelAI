@@ -17,7 +17,7 @@ export  const Sidebar = ( {serverSession} : SidebarProps) => {
         <aside className='sidebar'>
             <div className='flex size-full flex-col gap-4'>
                 <Link href="/" className='sidebar-logo'>
-                    <Image src="/assets/images/logo-text.svg" alt="logo" width={180} height={28} />
+                    <Image src="/assets/images/logo-icon1.png" alt="logo" width={180} height={28} />
                 </Link>
                 <nav className='sidebar-nav'>
                     {serverSession  && (
@@ -50,7 +50,7 @@ export  const Sidebar = ( {serverSession} : SidebarProps) => {
                                     return (
                                         <li key={link.route} className={`sidebar-nav_element group
                         ${isActive ? 'bg-purple-gradient text-white' : 'text-gray-700'}`}>
-                                            <Link className='sidebar-link' href={link.route}>
+                                            <Link className='sidebar-link' href={link.route == "/credits" ? link.route = "" : link.route}>
                                                 <Image
                                                     src={link.label == "Profile" ? currentUser?.image ?? link.icon : link.icon}
                                                     alt="logo"
@@ -58,7 +58,7 @@ export  const Sidebar = ( {serverSession} : SidebarProps) => {
                                                     height={24}
                                                     className={`${isActive && 'brightness-200'} rounded-full`}
                                                 />
-                                                {link.label}
+                                                {link.label == "Buy Credits" ? link.label = "Buy Credits (Soon)" : link.label}
                                             </Link>
                                         </li>
                                     )

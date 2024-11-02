@@ -329,7 +329,10 @@
   .sidebar-logo {
     @apply flex items-center gap-2 md:py-2;
   }
-
+  .login-logo{
+    width: 80%;
+    margin-left: 35px;
+  }
   .sidebar-nav {
     @apply h-full flex-col justify-between md:flex md:gap-4;
   }

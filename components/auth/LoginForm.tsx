@@ -20,6 +20,7 @@ import { login } from "@/lib/actions/login";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { CardWrapper } from "../shared/CardWrapper";
+import Image from "next/image";
 const LoginForm = () => {
     const searchParams = useSearchParams();
     const urlError = searchParams.get("error") === "OAuthAccountNotLinked"
@@ -53,7 +54,7 @@ const LoginForm = () => {
                         setShowTwoFactor(true);
                     }
                 })
-                
+
                 .catch((err) => {
                     setError("An error occurred during login.");
                 });
@@ -62,70 +63,74 @@ const LoginForm = () => {
     }
     return (
         <CardWrapper
-        headerTitle="Welcome back"
-        backButtonLabel="Don't have an account?"
-        backButtonHref="/register"
-        showSocial
-      >
-        <Form {...form}>
-            <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-6"
-            >
-                <div className="space-y-4">
-                    {!showTwoFactor && (
-                        <>
-                            <FormField
-                                control={form.control}
-                                name="email"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Email</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                {...field}
-                                                placeholder="john.doe@example.com"
-                                                type="email"
-                                                disabled={isPending}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            >
-                            </FormField>
-                            <FormField
-                                control={form.control}
-                                name="password"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Password</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                {...field}
-                                                placeholder="******"
-                                                type="password"
-                                                disabled={isPending}
-                                            />
-                                        </FormControl>
-                                        <Button
-                                            size="sm"
-                                            variant="link"
-                                            asChild
-                                            className="px-0 font"
-                                        >
-                                            <Link href="/reset">
-                                                Forgot password?
-                                            </Link>
-                                        </Button>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            >
-                            </FormField>
-                        </>
-                    )}
-                    {showTwoFactor && (
+            headerTitle="Welcome to"
+            backButtonLabel="Don't have an account?"
+            backButtonHref="/register"
+            showSocial
+        >
+            <div>
+                <Image className='login-logo' src="/assets/images/logo-icon1.png" alt="logo" width={180} height={28} />
+            </div>
+
+            <Form {...form}>
+                <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="space-y-6"
+                >
+                    <div className="space-y-4">
+                        {!showTwoFactor && (
+                            <>
+                                <FormField
+                                    control={form.control}
+                                    name="email"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Email</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    {...field}
+                                                    placeholder="john.doe@example.com"
+                                                    type="email"
+                                                    disabled={isPending}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                >
+                                </FormField>
+                                <FormField
+                                    control={form.control}
+                                    name="password"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Password</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    {...field}
+                                                    placeholder="******"
+                                                    type="password"
+                                                    disabled={isPending}
+                                                />
+                                            </FormControl>
+                                            <Button
+                                                size="sm"
+                                                variant="link"
+                                                asChild
+                                                className="px-0 font"
+                                            >
+                                                <Link href="/reset">
+                                                    Forgot password?
+                                                </Link>
+                                            </Button>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                >
+                                </FormField>
+                            </>
+                        )}
+                        {showTwoFactor && (
                             <FormField
                                 control={form.control}
                                 name="code"
@@ -144,20 +149,20 @@ const LoginForm = () => {
                                 )}
                             >
                             </FormField>
-                    )}
-                </div>
-                <FormError message={error || urlError} />
-                <FormSuccess message={success} />
-                <Button
-                    type="submit"
-                    className="w-full"
-                    disabled={isPending}
-                >
-                    {showTwoFactor ? "Confirm" : "Login"}
-                </Button>
-            </form>
+                        )}
+                    </div>
+                    <FormError message={error || urlError} />
+                    <FormSuccess message={success} />
+                    <Button
+                        type="submit"
+                        className="w-full"
+                        disabled={isPending}
+                    >
+                        {showTwoFactor ? "Confirm" : "Login"}
+                    </Button>
+                </form>
 
-        </Form>
+            </Form>
         </CardWrapper>
     )
 }
