@@ -69,7 +69,7 @@ const LoginForm = () => {
             showSocial
         >
             <div>
-                <Image className='login-logo' src="/assets/images/logo-icon1.png" alt="logo" width={180} height={28} />
+                <Image className='login-logo' src="/assets/images/logo-text1.png" alt="logo" width={180} height={28} />
             </div>
 
             <Form {...form}>
