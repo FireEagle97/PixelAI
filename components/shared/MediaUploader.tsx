@@ -4,7 +4,7 @@ import { dataUrl, getImageSize } from "@/lib/utils";
 import { CldImage, CldUploadWidget } from "next-cloudinary";
 import { PlaceholderValue } from "next/dist/shared/lib/get-img-props";
 import Image from "next/image";
-
+import { TiDelete } from "react-icons/ti";
 type MediaUploaderProps = {
     onValueChange: (value: string) => void;
     //react set state
@@ -41,6 +41,16 @@ function MediaUploader(
             className: 'error-toast'
         })
     }
+    const handleDeleteImage = () => {
+        setImage({}); // Reset the image state
+        onValueChange(""); // Clear the publicId
+        toast({
+            title: "Image deleted",
+            description: "You can now upload a new image",
+            duration: 5000,
+            className: "success-toast",
+        });
+    };
     return (
         <CldUploadWidget
             uploadPreset="dm_pixelai"
@@ -56,16 +66,24 @@ function MediaUploader(
                     <h3 className="h3-bold text-dark-600">Original</h3>
                     {publicId ? (
                         <>
-                           <div className="cursor-pointer overflow-hidden rounded-[10px]">
-                            <CldImage
-                                width={getImageSize(type, image, "width")}
-                                height={getImageSize(type, image, "height")}
-                                src={publicId}
-                                alt="image"
-                                sizes={"(max-width: 767px) 100vw, 50vw"}
-                                placeholder={dataUrl as PlaceholderValue}
-                                className="media-uploader_cldImage"
-                            />
+                            <div className="cursor-pointer overflow-hidden rounded-[10px] relative">
+                                <CldImage
+                                    width={getImageSize(type, image, "width")}
+                                    height={getImageSize(type, image, "height")}
+                                    src={publicId}
+                                    alt="image"
+                                    sizes={"(max-width: 767px) 100vw, 50vw"}
+                                    placeholder={dataUrl as PlaceholderValue}
+                                    className="media-uploader_cldImage"
+                                />
+                                <button
+                                    onClick={handleDeleteImage}
+                                    className="absolute top-2 right-2 bg-grey-500 text-white rounded-full p-1 hover:bg-red-600 transition"
+                                >
+                                    <TiDelete
+                                    className="w-6 h-6"
+                                    />
+                                </button>
                             </div>
                         </>
                     ) : (
