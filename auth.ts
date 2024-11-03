@@ -39,17 +39,18 @@ export const {
       if (account?.provider !== "credentials") return true;
       // const existingUser = user.id ? await getUserById(user.id) : null;
       const existingUser = await getUserById(user.id);
+      if(!existingUser) return false;
       //Prevent sign in without email verification
-      if (!existingUser?.emailVerified) return false;
+      // if (!existingUser?.emailVerified) return false;
 
-      if (existingUser.isTwoFactorEnabled) {
-        const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(existingUser.id);
-        if (!twoFactorConfirmation) return false
-        //Delete two factor confirmation for next sign in
-        await db.twoFactorConfirmation.delete({
-          where: { id: twoFactorConfirmation.id }
-        })
-      }
+      // if (existingUser.isTwoFactorEnabled) {
+      //   const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(existingUser.id);
+      //   if (!twoFactorConfirmation) return false
+      //   //Delete two factor confirmation for next sign in
+      //   await db.twoFactorConfirmation.delete({
+      //     where: { id: twoFactorConfirmation.id }
+      //   })
+      // }
 
       return true;
     },
@@ -61,7 +62,7 @@ export const {
       if (session.user) {
         session.user.id = token.sub;
         session.user.role = token.role as UserRole;
-        session.user.isTwoFactorEnabled = !!token.isTwoFactorEnabled;
+        // session.user.isTwoFactorEnabled = !!token.isTwoFactorEnabled;
         session.user.creditBalance = token.creditBalance || 0;
       }
       // if (token.sub && session.user) {
@@ -83,7 +84,7 @@ export const {
       const existingUser = await getUserById(token.sub);
       if (!existingUser) return token;
       token.role = existingUser.role;
-      token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
+      // token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
       token.creditBalance = existingUser.creditBalance;
       return token;
     }
