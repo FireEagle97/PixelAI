@@ -18,7 +18,7 @@ const IBMPlex = IBM_Plex_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "PixelAI",
+  title: "CoolPixels",
   description: "AI-powered image generator app",
 };
 
