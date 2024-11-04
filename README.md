@@ -7,7 +7,10 @@
     <img src="https://img.shields.io/badge/-Tailwind_CSS-black?style=for-the-badge&logoColor=white&logo=tailwindcss&color=06B6D4" alt="tailwindcss" />
   </div>
 
-  <h3 align="center">An AI SaaS Platform</h3>
+  <h3 align="center">Cool Pixels</h3>
+    <div align="center">
+     A photo editor app powered by AI
+    </div>
 </div>
 
 ## 📋 <a name="table">Table of Contents</a>
@@ -20,7 +23,7 @@
 
 ## <a name="introduction">🤖 Introduction</a>
 
-Build an AI image SaaS platform that excels in image processing capabilities, integrates a secure payment infrastructure, offers advanced image search functionalities, and supports multiple AI features, including image restoration, recoloring, object removal, generative filling, and background removal. This project can be a guide for your next AI image tool and a boost to your portfolio. 
+an AI image SaaS platform that excels in image processing capabilities, integrates a secure payment infrastructure, offers advanced image search functionalities, and supports multiple AI features, including image restoration, recoloring, object removal, generative filling, and background removal.
 
 ## <a name="tech-stack">⚙️ Tech Stack</a>
 
