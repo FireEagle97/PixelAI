@@ -8,16 +8,35 @@ import {
 import Link from 'next/link'
 import Image from 'next/image'
 import { navLinks } from '@/constants'
-import { usePathname } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 import { Button } from '../ui/button'
 import { signOut } from 'next-auth/react'
 
 
 function MobileNav() {
     const pathname = usePathname();
+    const searchParams = useSearchParams();
+    const currentTab = searchParams.get("tab") ?? "home";
+    const tabRouteMap: Record<string, string> = {
+        "/dashboard": "home",
+        "/transformations/add/restore": "restore",
+        "/transformations/add/fill": "fill",
+        "/transformations/add/remove": "remove",
+        "/transformations/add/recolor": "recolor",
+        "/transformations/add/removeBackground": "removeBackground",
+        "/profile": "profile",
+    };
+
+    const getNavHref = (route: string) => {
+        const mappedTab = tabRouteMap[route];
+
+        if (!mappedTab) return route;
+
+        return mappedTab === "home" ? "/dashboard" : `/dashboard?tab=${mappedTab}`;
+    };
     return (
         <header className='header'>
-            <Link href="/" className='flex items-center gap-2 md:py-2'>
+            <Link href="/dashboard" className='flex items-center gap-2 md:py-2'>
                 <Image
                     src="/assets/images/logo-text1.png"
                     alt="logo"
@@ -45,12 +64,17 @@ function MobileNav() {
                                 height={23}
                             />
                             <ul className='header-nav_elements'>
-                                {navLinks.map((link) => {
-                                    const isActive = link.route === pathname
+                                {navLinks.filter((link) => link.route !== "/credits").map((link) => {
+                                    const mappedTab = tabRouteMap[link.route];
+                                    const isActive = pathname === "/dashboard" && (
+                                        mappedTab === "home"
+                                            ? currentTab === "home"
+                                            : currentTab === mappedTab
+                                    );
                                     return (
                                         <li key={link.route} className={`${isActive && 'gradient-text'}
                                             p-18 flex whitespace-nowrap text-dark-700`}>
-                                            <Link className='sidebar-link cursor-pointer' href={link.route}>
+                                            <Link className='sidebar-link cursor-pointer' href={getNavHref(link.route)}>
                                                 <Image
                                                     src={link.icon}
                                                     alt="logo"
@@ -66,7 +90,7 @@ function MobileNav() {
                         </>
                     </SheetContent>
                 </Sheet>
-                <Button onClick={() => signOut()} className='button bg-purple-gradient bg-cover'>
+                <Button onClick={() => signOut({ callbackUrl: "/" })} className='button bg-purple-gradient bg-cover'>
                     Logout
                 </Button>
             </nav>

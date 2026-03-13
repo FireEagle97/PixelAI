@@ -7,6 +7,7 @@ import Google from "next-auth/providers/google";
 import bcrypt from "bcryptjs";
 
 export default {
+    trustHost: true,
     providers: [
         Github({
             clientId: process.env.AUTH_GITHUB_ID! as string,
