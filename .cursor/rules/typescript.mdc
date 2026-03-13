@@ -1,0 +1,146 @@
+---
+description: TypeScript and React coding standards
+globs:
+  - "**/*.ts"
+  - "**/*.tsx"
+alwaysApply: false
+---
+
+# TypeScript & React Standards — pixelAI
+
+## TypeScript
+
+`tsconfig.json` has `strict: true` enabled. All rules below are enforced by the compiler.
+
+### No `any`
+
+Use `unknown` with type narrowing instead of `any`.
+
+```ts
+// ✅
+function parseConfig(raw: unknown): TransformationConfig {
+  if (typeof raw !== "object" || raw === null) throw new Error("Invalid config");
+  return raw as TransformationConfig;
+}
+
+// ❌
+function parseConfig(raw: any) { ... }
+```
+
+### Explicit return types on exported functions
+
+```ts
+// ✅
+export async function getUserImages(userId: string): Promise<Image[]> { ... }
+
+// ❌
+export async function getUserImages(userId: string) { ... }
+```
+
+### `const` over `let`; `async/await` over `.then()`
+
+```ts
+// ✅
+const user = await currentUser();
+
+// ❌
+let user;
+currentUser().then(u => { user = u; });
+```
+
+### Type placement
+
+- Co-locate types with the module that owns them
+- Shared/global types go in `types/index.d.ts`
+- Zod schemas and inferred types go in `schemas/index.ts` — do not inline schemas in components
+
+```ts
+// ✅ in schemas/index.ts
+export const LoginSchema = z.object({ ... });
+export type LoginInput = z.infer<typeof LoginSchema>;
+```
+
+## React & Next.js components
+
+### Functional components only
+
+No class components. Use function declarations or arrow functions with explicit `React.FC` typing avoided — prefer typed props interfaces.
+
+```tsx
+// ✅
+interface HeaderProps {
+  title: string;
+  subtitle?: string;
+}
+
+export const Header = ({ title, subtitle }: HeaderProps) => { ... };
+
+// ❌
+class Header extends React.Component { ... }
+```
+
+### Named exports
+
+All components use named exports. Default exports are only used where Next.js requires them (page files, layout files, route handlers).
+
+```ts
+// ✅ components/shared/Header.tsx
+export const Header = () => { ... };
+
+// ❌
+export default function Header() { ... }
+```
+
+### `"use client"` — minimal usage
+
+Add `"use client"` only when the component uses hooks, browser APIs, or event handlers. Server Components are the default. Check existing files for the pattern before deciding.
+
+### Tailwind class merging
+
+Always use `cn()` from `@/lib/utils` when combining Tailwind classes conditionally.
+
+```tsx
+// ✅
+import { cn } from "@/lib/utils";
+<div className={cn("base-class", isActive && "active-class", className)} />
+
+// ❌
+<div className={`base-class ${isActive ? "active-class" : ""}`} />
+```
+
+## Forms
+
+All forms use **React Hook Form** with **`zodResolver`**. The reference implementation is `components/shared/TransformationForm.tsx`.
+
+```tsx
+// ✅ pattern
+const form = useForm<z.infer<typeof MySchema>>({
+  resolver: zodResolver(MySchema),
+  defaultValues: { ... },
+});
+```
+
+Use `components/shared/CustomField.tsx` as the wrapper for form fields with `FormField` + `FormControl` from shadcn/ui.
+
+## Server Actions
+
+Server Actions live in `lib/actions/`. They are `async` functions, always wrapped in `try/catch`, and always return a typed result shape.
+
+```ts
+// ✅
+export async function myAction(data: MyInput): Promise<{ success?: string; error?: string }> {
+  try {
+    const validated = MySchema.safeParse(data);
+    if (!validated.success) return { error: "Invalid input" };
+    // ... DB work
+    return { success: "Done" };
+  } catch (error) {
+    handleError(error);
+    return { error: "Something went wrong" };
+  }
+}
+```
+
+## shadcn/ui
+
+Never edit files in `components/ui/` directly. They are managed by the shadcn/ui CLI. To customize a component, wrap it in a new file under `components/shared/`.

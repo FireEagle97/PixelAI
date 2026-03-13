@@ -1,0 +1,92 @@
+---
+description: Core project rules — always applied
+alwaysApply: true
+---
+
+# Core Rules — pixelAI (imaginify)
+
+## Session start
+
+Read `AGENT.md` in the project root before taking any action in a new session. It contains the full project overview, folder structure, key files, and critical agent instructions.
+
+## Clarification
+
+Ask one clarifying question before acting on any ambiguous task. Do not silently assume intent.
+
+## Commit format
+
+Use Conventional Commits for all commit messages:
+- `feat:` — new feature or capability
+- `fix:` — bug fix
+- `refactor:` — code restructure without behavior change
+- `chore:` — tooling, deps, config
+- `docs:` — documentation only
+
+## Diff discipline
+
+Keep changes minimal and focused. One concern per change. Do not refactor unrelated code while fixing a bug, and do not fix bugs while adding features.
+
+## Path alias
+
+Always use the `@/` alias for imports. It resolves to the project root. There is no `src/` directory.
+
+```ts
+// ✅
+import { db } from "@/lib/db";
+import { cn } from "@/lib/utils";
+
+// ❌
+import { db } from "../../lib/db";
+```
+
+## Error handling
+
+Use `handleError()` from `@/lib/utils.ts` inside all `catch` blocks. Never swallow errors silently. Never throw raw errors from Server Actions to the client.
+
+```ts
+// ✅
+} catch (error) {
+  handleError(error);
+}
+
+// ❌
+} catch (e) {}
+```
+
+## No console.log in production code
+
+Remove all `console.log` statements before committing. Use `handleError()` for caught errors.
+
+## No secrets in source
+
+Never hardcode API keys, secrets, tokens, or credentials in any source file. All secrets live in `.env.local`.
+
+## Protected files — do not modify without explicit instruction
+
+- `.env`, `.env.local`, `.env.*`
+- `auth.ts`
+- `middleware.ts`
+- `routes.ts`
+- `prisma/schema.prisma`
+
+## Database access
+
+Always use `db` from `@/lib/db.ts`. Never instantiate `PrismaClient` directly. Never use the `mongoose` package — it is an unused dependency.
+
+```ts
+// ✅
+import { db } from "@/lib/db";
+const user = await db.user.findUnique({ where: { id } });
+
+// ❌
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
+```
+
+## Credits
+
+Never mutate `User.creditBalance` directly. Always call `updateCredits()` from `@/data/user.ts`.
+
+## Route protection
+
+Never add a route to `publicRoutes` in `routes.ts` without an explicit user instruction. Never bypass the auth check in `middleware.ts`.

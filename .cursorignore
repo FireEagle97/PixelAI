@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+
+# Next.js build output
+.next/
+out/
+dist/
+build/
+.cache/
+
+# Environment files — never include in AI context
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+.env.test
+
+# Lock files — too large, no useful signal
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Logs and coverage
+*.log
+npm-debug.log*
+coverage/
+.nyc_output/
+
+# Static assets — binary, no semantic value
+public/assets/images/
+public/assets/icons/
+public/vercel.svg
+
+# Prisma migrations — generated, noisy
+prisma/migrations/
+
+# Prisma generated client — generated code
+node_modules/.prisma/
+
+# TypeScript build info
+*.tsbuildinfo
+next-env.d.ts

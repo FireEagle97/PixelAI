@@ -1,0 +1,124 @@
+---
+description: API routes and Server Action patterns
+globs:
+  - "app/api/**"
+  - "lib/actions/**"
+alwaysApply: false
+---
+
+# API & Server Action Patterns — pixelAI
+
+## API route structure
+
+All API routes use the Next.js App Router convention — export named `GET`/`POST` handlers, not default exports.
+
+```ts
+// ✅ app/api/example/route.ts
+export async function GET(req: Request) { ... }
+export async function POST(req: Request) { ... }
+
+// ❌
+export default function handler(req, res) { ... }
+```
+
+## Authentication in API routes
+
+Always verify the session at the top of every protected route. Use `currentUser()` and `currentRole()` from `@/lib/auth.ts`.
+
+```ts
+// ✅
+import { currentUser, currentRole } from "@/lib/auth";
+
+export async function GET() {
+  const user = await currentUser();
+  if (!user) return new Response(null, { status: 401 });
+  // ...
+}
+```
+
+Reference: `app/api/data/route.ts` (session check), `app/api/admin/route.ts` (role check).
+
+## Admin routes
+
+Admin-only endpoints must check `role === "ADMIN"` via `currentRole()`:
+
+```ts
+// ✅ — follows app/api/admin/route.ts pattern
+const role = await currentRole();
+if (role !== "ADMIN") return new Response(null, { status: 403 });
+```
+
+## Stripe webhook — never skip signature verification
+
+The webhook at `app/api/webhooks/stripe/route.ts` must always verify the Stripe signature. This is a security-critical check.
+
+```ts
+// ✅ required pattern
+const event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET!);
+```
+
+Never bypass or comment out this check.
+
+## Server Actions
+
+Server Actions live in `lib/actions/`. They are `async` functions — not API routes. Follow this shape:
+
+```ts
+// ✅ pattern from lib/actions/image.actions.ts
+export async function addImage({ image, userId, path }: AddImageParams) {
+  try {
+    const newImage = await db.image.create({ data: { ...image, author: { connect: { id: userId } } } });
+    revalidatePath(path);
+    return JSON.parse(JSON.stringify(newImage));
+  } catch (error) {
+    handleError(error);
+  }
+}
+```
+
+Rules:
+- Always return `{ success: "..." }` or `{ error: "..." }` shapes when communicating outcomes to the UI
+- Never throw raw errors to the client — catch and return `{ error: "..." }`
+- Call `revalidatePath()` or `revalidateTag()` after mutations to keep the cache fresh
+
+## Input validation
+
+Validate all inputs with a Zod schema from `@/schemas/index.ts` before any DB write.
+
+```ts
+// ✅
+const validated = LoginSchema.safeParse(values);
+if (!validated.success) return { error: "Invalid fields" };
+const { email, password } = validated.data;
+```
+
+## Database access
+
+Only use `db` from `@/lib/db.ts`. Never instantiate `PrismaClient` directly.
+
+```ts
+import { db } from "@/lib/db";
+const image = await db.image.findUnique({ where: { id } });
+```
+
+## Credits deduction
+
+Never write to `User.creditBalance` directly. Always use `updateCredits()` from `@/data/user.ts`:
+
+```ts
+// ✅
+import { updateCredits } from "@/data/user";
+await updateCredits(userId, creditFee); // creditFee = -1
+```
+
+## Error handling
+
+```ts
+// ✅
+} catch (error) {
+  handleError(error);
+  return { error: "Something went wrong" };
+}
+```
+
+Never use empty `catch` blocks. Never re-throw `error` directly from a Server Action.
